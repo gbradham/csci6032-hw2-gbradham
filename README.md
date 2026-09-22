@@ -20,6 +20,17 @@ and Unicode `characters`. For example, the included `sample.txt` produces:
 {"lines": 6, "words": 6, "characters": 28}
 ```
 
+Pass `--top N` to also report the N most frequent whitespace-separated words.
+Words are grouped case-insensitively and sorted by decreasing frequency, then
+alphabetically to break ties:
+
+```bash
+python3 src/text_stats.py sample.txt --top 3
+```
+
+The JSON output includes a `top` list of `word`/`count` objects. Without
+`--top`, the output contains only the basic statistics above.
+
 Run the tests with Python's built-in `unittest` framework:
 
 ```bash

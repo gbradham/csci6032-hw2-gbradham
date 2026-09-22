@@ -11,7 +11,7 @@ PROGRAM = PROJECT_ROOT / "src" / "text_stats.py"
 
 
 class TextStatsTests(unittest.TestCase):
-    def run_program(self, content: str) -> dict[str, int]:
+    def run_program(self, content: str, *args: str) -> dict[str, object]:
         with tempfile.NamedTemporaryFile(
             mode="w", encoding="utf-8", suffix=".txt", delete=False
         ) as text_file:
@@ -19,7 +19,7 @@ class TextStatsTests(unittest.TestCase):
             path = Path(text_file.name)
         try:
             result = subprocess.run(
-                [sys.executable, str(PROGRAM), str(path)],
+                [sys.executable, str(PROGRAM), str(path), *args],
                 check=True,
                 capture_output=True,
                 text=True,
@@ -38,6 +38,27 @@ class TextStatsTests(unittest.TestCase):
         self.assertEqual(
             self.run_program(""),
             {"lines": 0, "words": 0, "characters": 0},
+        )
+
+    def test_top_words_are_case_insensitive_and_ties_are_alphabetical(self) -> None:
+        self.assertEqual(
+            self.run_program("Beta alpha ALPHA beta gamma", "--top", "3"),
+            {
+                "lines": 1,
+                "words": 5,
+                "characters": 27,
+                "top": [
+                    {"word": "alpha", "count": 2},
+                    {"word": "beta", "count": 2},
+                    {"word": "gamma", "count": 1},
+                ],
+            },
+        )
+
+    def test_top_zero_returns_no_words(self) -> None:
+        self.assertEqual(
+            self.run_program("one two", "--top", "0")["top"],
+            [],
         )
 
 
