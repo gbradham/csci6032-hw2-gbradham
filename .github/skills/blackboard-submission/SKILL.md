@@ -9,7 +9,7 @@ Constants:
 
 - Expected remote: `https://github.com/gbradham/csci6032-hw2-gbradham.git`
 - Repository URL to submit: `https://github.com/gbradham/csci6032-hw2-gbradham`
-- Archive: `csci6032-hw2-gbradham.tar.gz` (written outside the repository, e.g. `../`)
+- Archive: `csci6032-hw2-gbradham.tar.gz` (written to `dist/`, which is git-ignored, so the tree stays clean and the archive is never committed)
 - Required files: `CSCI6032_hw2.ipynb`, `README.md`, `AGENTS.md`, `sample.txt`,
   `Dockerfile`, `src/text_stats.py`, `tests/test_text_stats.py`,
   `.github/skills/blackboard-submission/SKILL.md`
@@ -66,16 +66,16 @@ Build from the committed `HEAD` only (this excludes `.git`, untracked files, and
 anything ignored):
 
 ```bash
-git archive --format=tar.gz --prefix=csci6032-hw2-gbradham/ \
-  -o ../csci6032-hw2-gbradham.tar.gz HEAD
-tar -tzf ../csci6032-hw2-gbradham.tar.gz
+mkdir -p dist && git archive --format=tar.gz --prefix=csci6032-hw2-gbradham/ \
+  -o dist/csci6032-hw2-gbradham.tar.gz HEAD
+tar -tzf dist/csci6032-hw2-gbradham.tar.gz
 ```
 
 Stop if the listing contains `__pycache__`, `*.pyc`, `.git/`, credentials, or
 unrelated files. Then show the student exactly:
 
 - notebook: `CSCI6032_hw2.ipynb` (at commit `<HEAD sha>`)
-- archive: `../csci6032-hw2-gbradham.tar.gz` and its size
+- archive: `dist/csci6032-hw2-gbradham.tar.gz` and its size
 - repository URL
 - submission text
 
